@@ -1,0 +1,66 @@
+#include <stdio.h>
+
+int main() {
+    int n, W;
+    
+    // Taking user input
+    printf("Enter the number of items: ");
+    scanf("%d", &n);
+
+    int profit[n], weight[n];
+    double ratio[n];
+
+    // Taking profit and weight inputs
+    for (int i = 0; i < n; i++) {
+        printf("Enter profit and weight for item %d: ", i + 1);
+        scanf("%d %d", &profit[i], &weight[i]);
+        ratio[i] = (double)profit[i] / weight[i]; // Calculating profit/weight ratio
+    }
+
+    // Sorting items based on profit/weight ratio (Descending Order)
+    for (int i = 0; i < n - 1; i++) {
+        for (int j = 0; j < n - i - 1; j++) {
+            if (ratio[j] < ratio[j + 1]) {
+                // Swap profit
+                int tempProfit = profit[j];
+                profit[j] = profit[j + 1];
+                profit[j + 1] = tempProfit;
+
+                // Swap weight
+                int tempWeight = weight[j];
+                weight[j] = weight[j + 1];
+                weight[j + 1] = tempWeight;
+
+                // Swap ratio
+                double tempRatio = ratio[j];
+                ratio[j] = ratio[j + 1];
+                ratio[j + 1] = tempRatio;
+            }
+        }
+    }
+
+    // Taking knapsack capacity
+    printf("Enter the capacity of the knapsack: ");
+    scanf("%d", &W);
+
+    double finalValue = 0.0;
+
+    // Loop through all items
+    for (int i = 0; i < n; i++) {
+        // If the item fits completely
+        if (weight[i] <= W) {
+            W -= weight[i];
+            finalValue += profit[i];
+        }
+        // If only a fraction of the item can be taken
+        else {
+            finalValue += profit[i] * ((double)W / weight[i]);
+            break;
+        }
+    }
+
+    // Display the maximum profit
+    printf("Maximum profit: %.2f\n", finalValue);
+
+    return 0;
+}
